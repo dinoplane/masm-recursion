@@ -1,0 +1,71 @@
+; Recursion.asm - Receives input from user and 
+;                 increments and displays a counter
+;                 using direct recursion
+; Assignment 5 by Isaac Chi
+INCLUDE Irvine32.inc
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto,dwExitCode:dword
+
+.data
+str1 BYTE "Please input a number: ", 0
+counter DWORD 0
+
+.code
+main proc
+	; Get input from user
+	mov edx, OFFSET [str1]
+	call WriteString
+	call crlf
+	call readDec
+	
+	;Set up program for calling recur
+	mov ecx, eax
+	call recur
+	invoke ExitProcess,0
+main endp
+
+recur proc
+;Receives: a double word value from ECX
+;Returns: Nothing but displays value of a counter
+;         at each call
+	; Increment counter and display it
+	inc counter
+	mov eax, counter
+	call writeint
+	call crlf
+
+	; Decrement ecx and jump to the call if 
+	; if ecx is not 0
+	loop L1
+	; Otherwise jump to termination
+	mov ecx, 2
+	loop L2
+	L1:
+		; call self
+		call recur
+	L2:
+		; terminate
+		ret
+recur endp
+end main
+
+COMMENT &
+Please input a number:
+9
++1
++2
++3
++4
++5
++6
++7
++8
++9
+
+C:\Users\DaDa\Desktop\ArrianSchoo\Spring2019\Computer Architecture\Assig5\Projec
+t32_VS2017\Debug\Project.exe (process 4252) exited with code 0.
+Press any key to close this window . . .
+
+&
